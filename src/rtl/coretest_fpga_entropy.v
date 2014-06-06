@@ -1,8 +1,8 @@
 //======================================================================
 //
-// coretest_bp_entropy.v
-// ---------------------
-// Top level module for the BP FPGA entropy source tester.
+// coretest_fpga_entropy.v
+// -----------------------
+// Top level module for the FPGA entropy source tester.
 //
 //
 // Author: Joachim Strombergson
@@ -36,16 +36,16 @@
 //
 //======================================================================
 
-module coretest_bp_entropy(
-                           input wire          clk,
-                           input wire          reset_n,
+module coretest_fpga_entropy(
+                             input wire          clk,
+                             input wire          reset_n,
                        
-                           // External interface.
-                           input wire          rxd,
-                           output wire         txd,
+                             // External interface.
+                             input wire          rxd,
+                             output wire         txd,
                            
-                           output wire [7 : 0] debug
-                          );
+                             output wire [7 : 0] debug
+                            );
 
   
   //----------------------------------------------------------------
@@ -148,15 +148,19 @@ module coretest_bp_entropy(
            );
 
 
-  entropy entropy(.clk(clk), 
-                  .nreset(reset_n), 
-                  .cs(ent_cs),
-                  .we(ent_we),
-                  .addr(ent_address),
-                  .dwrite(ent_write_data),
-                  .dread(ent_read_data),
-                  .debug(ent_debug)
-                 );
+  entropy fpga_entropy(
+                       .clk(clk),
+                       .reset_n(reset_n),
+
+                       .cs(ent_cs),
+                       .we(ent_we),
+                       .address(ent_address),
+                       .write_data(ent_write_data),
+                       .read_data(ent_read_data),
+                       .error(ent_error),
+
+                       .debug(ent_debug)
+                      );
 
   
   //----------------------------------------------------------------
@@ -199,7 +203,7 @@ module coretest_bp_entropy(
             ent_address        = coretest_address[7 : 0];
             ent_write_data     = coretest_write_data[15 : 0];
             coretest_read_data = ent_read_data;
-            coretest_error     = 1'b0;
+            coretest_error     = ent_error;
           end
         
         default:
@@ -208,8 +212,8 @@ module coretest_bp_entropy(
       endcase // case (coretest_address[15 : 8])
     end // address_mux
   
-endmodule // coretest_bp_entropy
+endmodule // coretest_fpga_entropy
 
 //======================================================================
-// EOF coretest_bp_entropy.v
+// EOF coretest_fpga_entropy.v
 //======================================================================
