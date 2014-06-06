@@ -67,7 +67,7 @@ STOP_BITS = 1
 
 # Delay times.
 PROC_DELAY_TIME = 0.01
-COMM_DELAY_TIME = 0.05
+COMM_DELAY_TIME = 0.001
 
 
 # Verbose operation on/off
@@ -96,6 +96,10 @@ BPENT_ADDR_RD_P         = '\x11'
 BPENT_ADDR_RD_N         = '\x12'
 BPENT_ADDR_MIX          = '\x20'
 BPENT_ADDR_CONCAT       = '\x21'
+
+ENT_ADDR_UPDATE         = '\x10'
+ENT_ADDR_OPA            = '\x11'
+ENT_ADDR_RND_READ       = '\x20'
 
 
 #-------------------------------------------------------------------
@@ -185,64 +189,15 @@ def read_word(prefix, addr, ser):
 
 
 #-------------------------------------------------------------------
-# read_rng1_rng2()
+# read_rnd_data()
 #-------------------------------------------------------------------
-def read_rng1_rng2(ser):
-    if VERBOSE:
-        print "Reading rng1 and rng2 three times."
-    
-    for i in range(3):
-        read_word(BPENT_ADDR_PREFIX, BPENT_ADDR_RD_RNG1_RNG2, ser)
-
-
-#-------------------------------------------------------------------
-# read_n_data()
-#
-# Note we do a lot of read ops here.
-#-------------------------------------------------------------------
-def read_n_data(ser):
+def read_rnd_data(ser):
     n = 10
     if VERBOSE:
-        print "Reading n vector %d times." % n
+        print "Reading rnd data %d times." % n
 
     for i in range(n):
-        read_word(BPENT_ADDR_PREFIX, BPENT_ADDR_RD_N, ser)
-
-
-#-------------------------------------------------------------------
-# read_p_data()
-#-------------------------------------------------------------------
-def read_p_data(ser):
-    n = 10
-    if VERBOSE:
-        print "Reading p vector %d times." % n
-
-    for i in range(n):
-        read_word(BPENT_ADDR_PREFIX, BPENT_ADDR_RD_P, ser)
-
-
-#-------------------------------------------------------------------
-# read_mix_data()
-#-------------------------------------------------------------------
-def read_mix_data(ser):
-    n = 10
-    if VERBOSE:
-        print "Reading mix vector %d times." % n
-
-    for i in range(n):
-        read_word(BPENT_ADDR_PREFIX, BPENT_ADDR_MIX, ser)
-
-
-#-------------------------------------------------------------------
-# read_concat_data()
-#-------------------------------------------------------------------
-def read_concat_data(ser):
-    n = 10
-    if VERBOSE:
-        print "Reading concat vector %d times." % n
-
-    for i in range(n):
-        read_word(BPENT_ADDR_PREFIX, BPENT_ADDR_CONCAT, ser)
+        read_word(BPENT_ADDR_PREFIX, ENT_ADDR_RND_READ, ser)
 
 
 #-------------------------------------------------------------------
@@ -309,11 +264,7 @@ def main():
     read_uart(ser)
 
     # Perform RNG read ops.
-    read_rng1_rng2(ser)
-    read_p_data(ser)
-    read_n_data(ser)
-    read_mix_data(ser)
-    read_concat_data(ser)
+    read_rnd_data(ser)
 
     print "Done!"
 
