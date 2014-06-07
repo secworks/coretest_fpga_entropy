@@ -148,7 +148,7 @@ module coretest_fpga_entropy(
            );
 
 
-  entropy fpga_entropy(
+   fpga_entropy entropy(
                        .clk(clk),
                        .reset_n(reset_n),
 
