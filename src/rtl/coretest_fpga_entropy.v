@@ -87,6 +87,7 @@ module coretest_fpga_entropy(
   reg [7 : 0]   ent_address;
   reg [31 : 0]  ent_write_data;
   wire [31 : 0] ent_read_data;
+  wire          ent_error;
   wire [7 : 0]  ent_debug;
   
   
@@ -201,7 +202,7 @@ module coretest_fpga_entropy(
             ent_cs             = coretest_cs;
             ent_we             = coretest_we;
             ent_address        = coretest_address[7 : 0];
-            ent_write_data     = coretest_write_data[15 : 0];
+            ent_write_data     = coretest_write_data;
             coretest_read_data = ent_read_data;
             coretest_error     = ent_error;
           end
